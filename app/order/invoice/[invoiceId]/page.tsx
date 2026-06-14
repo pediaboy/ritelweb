@@ -18,8 +18,13 @@ async function getInvoice(invoiceId: string) {
   }
 }
 
-export default async function InvoicePage({ params }: { params: { invoiceId: string } }) {
-  const invoice = await getInvoice(params.invoiceId)
+type Props = {
+  params: Promise<{ invoiceId: string }>
+}
+
+export default async function InvoicePage({ params }: Props) {
+  const { invoiceId } = await params
+  const invoice = await getInvoice(invoiceId)
   if (!invoice) notFound()
 
   const paymentMethod = PAYMENT_METHODS.find(m => m.id === invoice.metode_pembayaran)
